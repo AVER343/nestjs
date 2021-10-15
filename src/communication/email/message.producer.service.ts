@@ -38,7 +38,7 @@ export class MailingProducerService {
         html: `<h1>${JSON.stringify(data)}</h1>`,
         // templateId: emailTemplateId.SEND_OTP,
       };
-      //added to queue
+      //added to queue in database
       let activeQueue = await this.prismaService.queueActive.create({
         data: {
           user_id: userEmail.user_id,
@@ -46,7 +46,7 @@ export class MailingProducerService {
           data: send_message as unknown as Prisma.JsonObject,
         },
       });
-      //add to queue
+      //add to queue bulljs
       await this.queue.add('message-job', {
         props: {
           queue_id: activeQueue.id,

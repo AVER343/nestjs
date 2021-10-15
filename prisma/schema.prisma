@@ -35,7 +35,6 @@ model UserEmail {
   status        Int      @default(1)
   modified_time DateTime @default(now())
   user          Users    @relation(fields: [user_id], references: [id])
-
   @@index([user_id], name: "UserEmail_user_id_idx")
 }
 
@@ -46,7 +45,6 @@ model UserPhone {
   created_time  DateTime @default(now())
   modified_time DateTime @default(now())
   user          Users    @relation(fields: [user_id], references: [id])
-
   @@index([user_id], name: "UserPhone_user_id_idx")
 }
 
@@ -102,7 +100,6 @@ model UserRole {
   user_id        Int
   Users          Users        @relation(fields: [user_id], references: [id])
   user_role_type UserRoleType @relation(fields: [user_role], references: [id])
-
   @@unique([user_role, user_id], name: "unique_roles")
   @@index([user_id], name: "UserRole.user_id_index")
 }

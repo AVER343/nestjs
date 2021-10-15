@@ -37,6 +37,7 @@ export class MailingConsumerService {
   }
   @OnQueueCompleted()
   async handleQueueCompleted(job: Job, result: any) {
+    console.log({job})
     let { props, data } = job.data;
     await this.prismaService.jobStatusTable.create({
       data: { queue_type: props.queue_type, data, user_id: props.user_id || 0 },

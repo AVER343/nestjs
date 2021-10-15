@@ -1,4 +1,4 @@
-import { MiddlewareConsumer, Module } from '@nestjs/common';
+import { MiddlewareConsumer, Module, NestModule } from '@nestjs/common';
 import { AppController } from './app.controller';
 import { AppService } from './app.service';
 import { PrismaModule } from './prisma/prisma.module';
@@ -10,6 +10,7 @@ import { SendGridModule } from '@ntegral/nestjs-sendgrid';
 import { EmailModule } from './communication/email/email.module';
 import { ConfigModule, ConfigService } from '@nestjs/config';
 import { JwtModule } from '@nestjs/jwt';
+import { CurrentUserMiddleware } from './common/middleware/current-user.middleware';
 @Module({
   imports: [
     EmailModule,
@@ -32,10 +33,10 @@ import { JwtModule } from '@nestjs/jwt';
 
     SendGridModule.forRoot({
       apiKey:
-        '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',
+        process.env.SENDGRID_SECRET,
     }),
   ],
   controllers: [AppController],
   providers: [AppService],
 })
-export class AppModule {}
+  export class AppModule{}

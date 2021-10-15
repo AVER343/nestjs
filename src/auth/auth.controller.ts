@@ -26,6 +26,7 @@ import { OnlyAuthorized } from 'src/common/guards/authorization.guard';
 import { OnlyAuthenticated } from 'src/common/guards/autheticated.guard';
 import { MailingProducerService } from 'src/communication/email/message.producer.service';
 import { TemplateNames } from 'src/communication/email/interfaces/email.interface';
+import { PrismaService } from 'src/prisma/prisma.service';
 @Serialize(UserDto)
 @Controller('/auth')
 export class AuthController {
@@ -40,6 +41,9 @@ export class AuthController {
   ) {
     let user = await this.authService.signup(data);
     let token = await this.authService.userService.getJWT(user);
+    this.messageProducerService.sendOTP(user, {
+      otp: this.authService.generateOTP(),
+    });
     res.cookie(JWT_COOKIE_KEY, token);
     res.send(user);
   }
@@ -55,7 +59,12 @@ export class AuthController {
     }
     //user account deleted/suspended
     if (user.status > 2) {
-      throw new BadRequestException(`Account is no longer accessible`);
+      let reason = (
+        await this.authService.prisma.status.findFirst({
+          where: { id: user.status },
+        })
+      ).status;
+      throw new BadRequestException(`Your account has been ${reason}`);
     }
     let token = await this.authService.userService.getJWT(user);
     res.cookie(JWT_COOKIE_KEY, token);
@@ -87,8 +96,5 @@ export class AuthController {
   }
 
   @Post('/verify/otp/:username')
-  async verifyOTP(@Param('username') username){
-    
-
-  }
+  async verifyOTP(@Param('username') username) {}
 }

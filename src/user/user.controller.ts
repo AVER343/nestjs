@@ -26,9 +26,7 @@ export class UserController {
     @Res({ passthrough: true }) response: Response,
   ): Promise<Users | null> {
     let { id } = params;
-    console.log({ id });
-    id = typeof id == 'number' ? id : parseInt(id);
-    let user = await this.usersService.findById(id);
+    let user = await this.usersService.findById(parseInt(id));
     if (!user) {
       throw new NotFoundException(`User not found !`);
     }
@@ -38,4 +36,6 @@ export class UserController {
     }
     return user;
   }
+
+  
 }

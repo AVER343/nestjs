@@ -15,10 +15,11 @@ import { UserService } from 'src/user/user.service';
 import { LoginUserDTO } from './dto/login.dto';
 import { scrypt as _scrypt } from 'crypto';
 import { ResetPasswordDTO } from './dto/reset.password.dto';
+import { PrismaService } from 'src/prisma/prisma.service';
 const scrypt = promisify(_scrypt);
 @Injectable()
 export class AuthService {
-  constructor(public userService: UserService) {}
+  constructor(public userService: UserService,public prisma:PrismaService) {}
 
   async signup(data: CreateUserDTO): Promise<Users> {
     let user = await this.userService.createUser(data);
@@ -41,7 +42,7 @@ export class AuthService {
   async verifyOTP(data:ResetPasswordDTO){
     
   }
-  async generateOTP(length?: number) {
+  generateOTP(length?: number) {
     let otp = ``;
     Array(length || 6)
       .fill((e) => 3)

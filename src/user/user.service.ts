@@ -13,7 +13,7 @@ export class UserService {
     if (!id) {
       return null;
     }
-    let user = await this.prisma.users.findFirst({ where: { id } });
+    let user = await this.prisma.users.findFirst({ where: { id }});
     return user;
   }
   async getEmail(user_id: number): Promise<UserEmail | null> {

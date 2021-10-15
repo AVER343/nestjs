@@ -1,4 +1,4 @@
-import { MiddlewareConsumer, Module } from '@nestjs/common';
+import { MiddlewareConsumer, Module, NestModule } from '@nestjs/common';
 import { ConfigModule, ConfigService } from '@nestjs/config';
 import { JwtModule } from '@nestjs/jwt';
 import { PassportModule } from '@nestjs/passport';
@@ -20,10 +20,10 @@ import { UserService } from './user.service';
       inject: [ConfigService],
     }),
   ],
-  providers: [UserService,PrismaService, JwtStrategy],
+  providers: [UserService, PrismaService, JwtStrategy],
   exports: [UserModule],
 })
-export class UserModule {
+export class UserModule implements NestModule {
   configure(consumer: MiddlewareConsumer) {
     consumer.apply(CurrentUserMiddleware).forRoutes('*');
   }

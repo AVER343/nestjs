@@ -17,6 +17,7 @@ export class CurrentUserMiddleware implements NestMiddleware {
       let __user = await this.userService.verifyJWT(token);
       if (__user) {
         user = await this.userService.findById(__user.id);
+        console.log({user})
         if (user) delete user.password;
       }
     }

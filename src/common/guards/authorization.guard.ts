@@ -7,6 +7,7 @@ export class OnlyAuthorized implements CanActivate {
     context: ExecutionContext,
   ): boolean | Promise<boolean> | Observable<boolean> {
     const request = context.switchToHttp().getRequest();
+    console.log(request)
     return checkAuthorization(request);
   }
 }
