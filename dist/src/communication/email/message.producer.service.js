@@ -17,7 +17,7 @@ const user_service_1 = require("../../user/user.service");
 const prisma_service_1 = require("../../prisma/prisma.service");
 const bull_1 = require("@nestjs/bull");
 const common_1 = require("@nestjs/common");
-const constant_1 = require("../../../config/constant");
+const config_1 = require("../../../config");
 const email_enum_1 = require("../../common/enums/email.enum");
 let MailingProducerService = class MailingProducerService {
     constructor(queue, userService, prismaService) {
@@ -48,7 +48,7 @@ let MailingProducerService = class MailingProducerService {
         let activeQueue = await this.prismaService.queueActive.create({
             data: {
                 user_id: userEmail.user_id,
-                queue_type: constant_1.QUEUES.SEND_EMAIL,
+                queue_type: config_1.QUEUES.SEND_EMAIL,
                 data: send_message,
             },
         });
@@ -57,7 +57,7 @@ let MailingProducerService = class MailingProducerService {
                 queue_id: activeQueue.id,
                 email: userEmail.email,
                 user_id: userEmail.user_id,
-                queue_type: constant_1.QUEUES.SEND_EMAIL
+                queue_type: config_1.QUEUES.SEND_EMAIL,
             },
             data: send_message,
         });
@@ -65,7 +65,7 @@ let MailingProducerService = class MailingProducerService {
 };
 MailingProducerService = __decorate([
     (0, common_1.Injectable)(),
-    __param(0, (0, bull_1.InjectQueue)(constant_1.QUEUES.SEND_EMAIL)),
+    __param(0, (0, bull_1.InjectQueue)(config_1.QUEUES.SEND_EMAIL)),
     __metadata("design:paramtypes", [Object, user_service_1.UserService,
         prisma_service_1.PrismaService])
 ], MailingProducerService);

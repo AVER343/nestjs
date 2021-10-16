@@ -7,6 +7,9 @@ var __decorate = (this && this.__decorate) || function (decorators, target, key,
 };
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.AppModule = void 0;
+const buyer_module_1 = require("./roles/buyer/buyer.module");
+const seller_module_1 = require("./roles/seller/seller.module");
+const admin_module_1 = require("./roles/admin/admin.module");
 const common_1 = require("@nestjs/common");
 const app_controller_1 = require("./app.controller");
 const app_service_1 = require("./app.service");
@@ -14,26 +17,29 @@ const prisma_module_1 = require("./prisma/prisma.module");
 const user_module_1 = require("./user/user.module");
 const auth_module_1 = require("./auth/auth.module");
 const bull_1 = require("@nestjs/bull");
-const constant_1 = require("../config/constant");
+const config_1 = require("../config");
 const nestjs_sendgrid_1 = require("@ntegral/nestjs-sendgrid");
 const email_module_1 = require("./communication/email/email.module");
-const config_1 = require("@nestjs/config");
+const config_2 = require("@nestjs/config");
 const jwt_1 = require("@nestjs/jwt");
 let AppModule = class AppModule {
 };
 AppModule = __decorate([
     (0, common_1.Module)({
         imports: [
+            buyer_module_1.BuyerModule,
+            seller_module_1.SellerModule,
+            admin_module_1.AdminModule,
             email_module_1.EmailModule,
             prisma_module_1.PrismaModule,
             user_module_1.UserModule,
             auth_module_1.AuthModule,
             jwt_1.JwtModule.registerAsync({
-                imports: [config_1.ConfigModule],
+                imports: [config_2.ConfigModule],
                 useFactory: async () => ({
-                    secret: constant_1.JWT_COOKIE_SECRET,
+                    secret: config_1.JWT_COOKIE_SECRET,
                 }),
-                inject: [config_1.ConfigService],
+                inject: [config_2.ConfigService],
             }),
             bull_1.BullModule.forRoot({
                 redis: {

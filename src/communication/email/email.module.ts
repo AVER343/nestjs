@@ -1,4 +1,4 @@
-import { JWT_COOKIE_SECRET, QUEUES } from 'config/constant';
+import { JWT_COOKIE_SECRET, QUEUES } from 'config';
 /*
 https://docs.nestjs.com/modules
 */

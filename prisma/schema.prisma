@@ -2,9 +2,7 @@ generator client {
   provider        = "prisma-client-js"
   previewFeatures = ["interactiveTransactions", "fullTextSearch"]
 }
-enum QUEUES {
-  SEND_EMAIL
-}
+
 datasource db {
   provider = "postgresql"
   url      = env("DATABASE_URL")
@@ -16,16 +14,17 @@ model Status {
 }
 
 model Users {
-  id            Int        @id @default(autoincrement())
-  username      String     @unique @db.VarChar(64)
-  password      String
-  created_time  DateTime   @default(now())
-  modified_time DateTime   @default(now())
-  status        Int        @default(1)
-  User_email    UserEmail?
-  user_otp      UserOtp[]
-  User_phone    UserPhone?
-  userrole      UserRole[]
+  id                  Int                   @id @default(autoincrement())
+  username            String                @unique @db.VarChar(64)
+  password            String
+  created_time        DateTime              @default(now())
+  modified_time       DateTime              @default(now())
+  status              Int                   @default(1)
+  User_email          UserEmail?
+  user_otp            UserOtp[]
+  User_phone          UserPhone?
+  userrole            UserRole[]
+  special_permissions special_permissions[]
 }
 
 model UserEmail {
@@ -35,6 +34,7 @@ model UserEmail {
   status        Int      @default(1)
   modified_time DateTime @default(now())
   user          Users    @relation(fields: [user_id], references: [id])
+
   @@index([user_id], name: "UserEmail_user_id_idx")
 }
 
@@ -45,12 +45,15 @@ model UserPhone {
   created_time  DateTime @default(now())
   modified_time DateTime @default(now())
   user          Users    @relation(fields: [user_id], references: [id])
+
   @@index([user_id], name: "UserPhone_user_id_idx")
 }
 
 model ApiNames {
-  id       Int    @id @default(autoincrement())
-  api_name String @unique @db.VarChar(50)
+  id                  Int                   @id @default(autoincrement())
+  api_name            String                @unique @db.VarChar(50)
+  ApiRolePermissions  ApiRolePermissions[]
+  special_permissions special_permissions[]
 }
 
 model JobStatusTable {
@@ -66,7 +69,7 @@ model JobStatusTable {
 
 model QueueActive {
   id         Int    @id @default(autoincrement())
-  queue_type QUEUES 
+  queue_type QUEUES
   data       Json?  @default("{}")
   user_id    Int?
 }
@@ -89,9 +92,10 @@ model UserOtp {
 }
 
 model UserRoleType {
-  id        Int        @id @default(autoincrement()) @db.SmallInt
-  user_role String?    @unique @db.VarChar(64)
-  userrole  UserRole[]
+  id                 Int                  @id @default(autoincrement()) @db.SmallInt
+  user_role          String?              @unique @db.VarChar(64)
+  ApiRolePermissions ApiRolePermissions[]
+  userrole           UserRole[]
 }
 
 model UserRole {
@@ -100,8 +104,10 @@ model UserRole {
   user_id        Int
   Users          Users        @relation(fields: [user_id], references: [id])
   user_role_type UserRoleType @relation(fields: [user_role], references: [id])
-  @@unique([user_role, user_id], name: "unique_roles")
+
+  @@unique([user_role, user_id], name: "UserRole_user_role_user_id_key")
   @@index([user_id], name: "UserRole.user_id_index")
+  ApiRolePermissions ApiRolePermissions[]
 }
 
 model UserStatelessAuthentication {
@@ -121,4 +127,26 @@ model StatelessAuthenicatonTypes {
   StatelessAuthenicatonType   String                        @db.VarChar(64)
   description                 Json?
   UserStatelessAuthentication UserStatelessAuthentication[]
+}
+
+model ApiRolePermissions {
+  id             Int           @id @default(autoincrement())
+  api_id         Int
+  role_type_id   Int           @db.Integer
+  ApiNames       ApiNames      @relation(fields: [api_id], references: [id])
+  UserRole       UserRole      @relation(fields: [role_type_id], references: [id])
+  UserRoleType   UserRoleType? @relation(fields: [userRoleTypeId], references: [id])
+  userRoleTypeId Int?          @db.SmallInt
+}
+
+model special_permissions {
+  id       Int      @id @default(autoincrement())
+  api_id   Int
+  user_id  Int
+  ApiNames ApiNames @relation(fields: [api_id], references: [id])
+  Users    Users    @relation(fields: [user_id], references: [id])
+}
+
+enum QUEUES {
+  SEND_EMAIL
 }

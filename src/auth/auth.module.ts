@@ -6,7 +6,7 @@ import { UserService } from 'src/user/user.service';
 import { AuthController } from './auth.controller';
 import { AuthService } from './auth.service';
 import { ConfigModule, ConfigService } from '@nestjs/config';
-import { JWT_COOKIE_SECRET, QUEUES } from 'config/constant';
+import { JWT_COOKIE_SECRET, QUEUES } from 'config';
 import { JwtStrategy } from './strategy/jwt.strategy';
 import { APP_INTERCEPTOR } from '@nestjs/core';
 import { BullModule } from '@nestjs/bull';

@@ -9,33 +9,18 @@ var __metadata = (this && this.__metadata) || function (k, v) {
     if (typeof Reflect === "object" && typeof Reflect.metadata === "function") return Reflect.metadata(k, v);
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.CurrentUserMiddleware = void 0;
+exports.SellerService = void 0;
+const prisma_service_1 = require("../../prisma/prisma.service");
 const common_1 = require("@nestjs/common");
-const constant_1 = require("../../../config/constant");
 const user_service_1 = require("../../user/user.service");
-let CurrentUserMiddleware = class CurrentUserMiddleware {
-    constructor(userService) {
-        this.userService = userService;
-    }
-    async use(req, res, next) {
-        let user = null;
-        let token = (req.cookies && req.cookies[constant_1.JWT_COOKIE_KEY]) || null;
-        if (token) {
-            let __user = await this.userService.verifyJWT(token);
-            if (__user) {
-                user = await this.userService.findById(__user.id);
-                console.log({ user });
-                if (user)
-                    delete user.password;
-            }
-        }
-        req.user = user;
-        next();
+let SellerService = class SellerService {
+    constructor(prisma) {
+        this.prisma = prisma;
     }
 };
-CurrentUserMiddleware = __decorate([
+SellerService = __decorate([
     (0, common_1.Injectable)(),
-    __metadata("design:paramtypes", [user_service_1.UserService])
-], CurrentUserMiddleware);
-exports.CurrentUserMiddleware = CurrentUserMiddleware;
-//# sourceMappingURL=set-api-names.middleware.js.map
+    __metadata("design:paramtypes", [prisma_service_1.PrismaService])
+], SellerService);
+exports.SellerService = SellerService;
+//# sourceMappingURL=seller.service.js.map

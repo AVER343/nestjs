@@ -19,9 +19,8 @@ const auth_service_1 = require("./auth.service");
 const createUser_dto_1 = require("../user/dto/createUser.dto");
 const serialize_interceptor_1 = require("../common/interceptor/serialize.interceptor");
 const user_dto_1 = require("../user/dto/user.dto");
-const constant_1 = require("../../config/constant");
+const index_1 = require("../../config/index");
 const login_dto_1 = require("./dto/login.dto");
-const authorization_guard_1 = require("../common/guards/authorization.guard");
 const autheticated_guard_1 = require("../common/guards/autheticated.guard");
 const message_producer_service_1 = require("../communication/email/message.producer.service");
 const email_interface_1 = require("../communication/email/interfaces/email.interface");
@@ -37,7 +36,7 @@ let AuthController = class AuthController {
         this.messageProducerService.sendOTP(user, {
             otp: this.authService.generateOTP(),
         });
-        res.cookie(constant_1.JWT_COOKIE_KEY, token);
+        res.cookie(index_1.JWT_COOKIE_KEY, token);
         res.send(user);
     }
     async login(data, res) {
@@ -52,11 +51,11 @@ let AuthController = class AuthController {
             throw new common_1.BadRequestException(`Your account has been ${reason}`);
         }
         let token = await this.authService.userService.getJWT(user);
-        res.cookie(constant_1.JWT_COOKIE_KEY, token);
+        res.cookie(index_1.JWT_COOKIE_KEY, token);
         return user;
     }
     async logout(res) {
-        res.clearCookie(constant_1.JWT_COOKIE_KEY);
+        res.clearCookie(index_1.JWT_COOKIE_KEY);
         res.status(200).send({});
     }
     async changePassword(username, res) {
@@ -91,7 +90,6 @@ __decorate([
 __decorate([
     (0, common_1.Post)('/logout'),
     (0, common_1.HttpCode)(200),
-    (0, common_1.UseGuards)(autheticated_guard_1.OnlyAuthenticated),
     __param(0, (0, common_1.Res)()),
     __metadata("design:type", Function),
     __metadata("design:paramtypes", [Object]),

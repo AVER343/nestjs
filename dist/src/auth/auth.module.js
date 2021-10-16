@@ -15,7 +15,7 @@ const user_service_1 = require("../user/user.service");
 const auth_controller_1 = require("./auth.controller");
 const auth_service_1 = require("./auth.service");
 const config_1 = require("@nestjs/config");
-const constant_1 = require("../../config/constant");
+const config_2 = require("../../config");
 const jwt_strategy_1 = require("./strategy/jwt.strategy");
 const bull_1 = require("@nestjs/bull");
 const message_producer_service_1 = require("../communication/email/message.producer.service");
@@ -37,13 +37,13 @@ AuthModule = __decorate([
         ],
         imports: [
             bull_1.BullModule.registerQueue({
-                name: constant_1.QUEUES.SEND_EMAIL,
+                name: config_2.QUEUES.SEND_EMAIL,
             }),
             passport_1.PassportModule,
             jwt_1.JwtModule.registerAsync({
                 imports: [config_1.ConfigModule],
                 useFactory: async () => ({
-                    secret: constant_1.JWT_COOKIE_SECRET,
+                    secret: config_2.JWT_COOKIE_SECRET,
                 }),
                 inject: [config_1.ConfigService],
             }),

@@ -13,7 +13,7 @@ exports.MailingConsumerService = void 0;
 const prisma_service_1 = require("./../../prisma/prisma.service");
 const common_1 = require("@nestjs/common");
 const bull_1 = require("@nestjs/bull");
-const constant_1 = require("../../../config/constant");
+const config_1 = require("../../../config");
 const _email_service_1 = require("./utils/_email.service");
 const user_service_1 = require("../../user/user.service");
 let MailingConsumerService = class MailingConsumerService {
@@ -56,7 +56,7 @@ __decorate([
 ], MailingConsumerService.prototype, "handleQueueCompleted", null);
 MailingConsumerService = __decorate([
     (0, common_1.Injectable)(),
-    (0, bull_1.Processor)(constant_1.QUEUES.SEND_EMAIL),
+    (0, bull_1.Processor)(config_1.QUEUES.SEND_EMAIL),
     __metadata("design:paramtypes", [_email_service_1.MailingService,
         prisma_service_1.PrismaService])
 ], MailingConsumerService);

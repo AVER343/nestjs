@@ -11,7 +11,7 @@ exports.UserModule = void 0;
 const common_1 = require("@nestjs/common");
 const config_1 = require("@nestjs/config");
 const jwt_1 = require("@nestjs/jwt");
-const constant_1 = require("../../config/constant");
+const config_2 = require("../../config");
 const jwt_strategy_1 = require("../auth/strategy/jwt.strategy");
 const current_user_middleware_1 = require("../common/middleware/current-user.middleware");
 const prisma_service_1 = require("../prisma/prisma.service");
@@ -29,7 +29,7 @@ UserModule = UserModule_1 = __decorate([
             jwt_1.JwtModule.registerAsync({
                 imports: [config_1.ConfigModule],
                 useFactory: async () => ({
-                    secret: constant_1.JWT_COOKIE_SECRET,
+                    secret: config_2.JWT_COOKIE_SECRET,
                 }),
                 inject: [config_1.ConfigService],
             }),

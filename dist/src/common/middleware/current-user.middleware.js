@@ -11,7 +11,7 @@ var __metadata = (this && this.__metadata) || function (k, v) {
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.CurrentUserMiddleware = void 0;
 const common_1 = require("@nestjs/common");
-const constant_1 = require("../../../config/constant");
+const config_1 = require("../../../config");
 const user_service_1 = require("../../user/user.service");
 let CurrentUserMiddleware = class CurrentUserMiddleware {
     constructor(userService) {
@@ -19,12 +19,12 @@ let CurrentUserMiddleware = class CurrentUserMiddleware {
     }
     async use(req, res, next) {
         let user = null;
-        let token = (req.cookies && req.cookies[constant_1.JWT_COOKIE_KEY]) || null;
+        let token = (req.cookies && req.cookies[config_1.JWT_COOKIE_KEY]) || null;
         if (token) {
             let __user = await this.userService.verifyJWT(token);
             if (__user) {
                 user = await this.userService.findById(__user.id);
-                if (user.status > 2) {
+                if (user && user.status > 2) {
                     let reason = (await this.userService.prisma.status.findFirst({
                         where: { id: user.status },
                     })).status;

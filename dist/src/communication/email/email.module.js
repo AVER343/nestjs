@@ -7,7 +7,7 @@ var __decorate = (this && this.__decorate) || function (decorators, target, key,
 };
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.EmailModule = void 0;
-const constant_1 = require("../../../config/constant");
+const config_1 = require("../../../config");
 const bull_1 = require("@nestjs/bull");
 const common_1 = require("@nestjs/common");
 const prisma_service_1 = require("../../prisma/prisma.service");
@@ -16,21 +16,21 @@ const _email_service_1 = require("./utils/_email.service");
 const message_consumer_service_1 = require("./message.consumer.service");
 const message_producer_service_1 = require("./message.producer.service");
 const jwt_1 = require("@nestjs/jwt");
-const config_1 = require("@nestjs/config");
+const config_2 = require("@nestjs/config");
 let EmailModule = class EmailModule {
 };
 EmailModule = __decorate([
     (0, common_1.Module)({
         imports: [
             bull_1.BullModule.registerQueue({
-                name: constant_1.QUEUES.SEND_EMAIL,
+                name: config_1.QUEUES.SEND_EMAIL,
             }),
             jwt_1.JwtModule.registerAsync({
-                imports: [config_1.ConfigModule],
+                imports: [config_2.ConfigModule],
                 useFactory: async () => ({
-                    secret: constant_1.JWT_COOKIE_SECRET,
+                    secret: config_1.JWT_COOKIE_SECRET,
                 }),
-                inject: [config_1.ConfigService],
+                inject: [config_2.ConfigService],
             }),
         ],
         controllers: [],

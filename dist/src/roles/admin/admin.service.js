@@ -9,21 +9,30 @@ var __metadata = (this && this.__metadata) || function (k, v) {
     if (typeof Reflect === "object" && typeof Reflect.metadata === "function") return Reflect.metadata(k, v);
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.CurrentUserInterceptor = void 0;
+exports.AdminService = void 0;
+const prisma_service_1 = require("../../prisma/prisma.service");
 const common_1 = require("@nestjs/common");
 const user_service_1 = require("../../user/user.service");
-const constant_1 = require("../../../config/constant");
-let CurrentUserInterceptor = class CurrentUserInterceptor {
-    constructor(userService) {
+let AdminService = class AdminService {
+    constructor(prisma, userService) {
+        this.prisma = prisma;
         this.userService = userService;
     }
-    async intercept(context, next) {
-        return next.handle().pipe();
+    async getAdmins() {
+        let admins = (await this.prisma.userRole.findMany({
+            where: {
+                user_role_type: { user_role: 'ADMIN' },
+            },
+        })).map((e) => e.user_id);
+        admins = admins.map((e) => this.userService.findById(e));
+        admins = (await Promise.all(admins));
+        admins = admins.filter((e) => e.status <= 2);
+        return admins;
     }
 };
-CurrentUserInterceptor = __decorate([
+AdminService = __decorate([
     (0, common_1.Injectable)(),
-    __metadata("design:paramtypes", [user_service_1.UserService])
-], CurrentUserInterceptor);
-exports.CurrentUserInterceptor = CurrentUserInterceptor;
-//# sourceMappingURL=current-user.interceptor.js.map
+    __metadata("design:paramtypes", [prisma_service_1.PrismaService, user_service_1.UserService])
+], AdminService);
+exports.AdminService = AdminService;
+//# sourceMappingURL=admin.service.js.map

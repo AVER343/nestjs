@@ -18,11 +18,10 @@ import { CreateUserDTO } from 'src/user/dto/createUser.dto';
 import { Serialize } from 'src/common/interceptor/serialize.interceptor';
 import { UserDto } from 'src/user/dto/user.dto';
 import { Response } from 'express';
-import { JWT_COOKIE_KEY } from 'config/constant';
+import { JWT_COOKIE_KEY } from 'config/index';
 import { LoginUserDTO } from './dto/login.dto';
 import { Users } from '@prisma/client';
 import { JwtStrategy } from './strategy/jwt.strategy';
-import { OnlyAuthorized } from 'src/common/guards/authorization.guard';
 import { OnlyAuthenticated } from 'src/common/guards/autheticated.guard';
 import { MailingProducerService } from 'src/communication/email/message.producer.service';
 import { TemplateNames } from 'src/communication/email/interfaces/email.interface';
@@ -73,7 +72,6 @@ export class AuthController {
 
   @Post('/logout')
   @HttpCode(200)
-  @UseGuards(OnlyAuthenticated)
   async logout(@Res() res: Response) {
     res.clearCookie(JWT_COOKIE_KEY);
     res.status(200).send({});

@@ -12,7 +12,7 @@ Object.defineProperty(exports, "__esModule", { value: true });
 exports.AuthService = void 0;
 const util_1 = require("util");
 const common_1 = require("@nestjs/common");
-const constant_1 = require("../../config/constant");
+const config_1 = require("../../config");
 const createUser_dto_1 = require("../user/dto/createUser.dto");
 const user_dto_1 = require("../user/dto/user.dto");
 const user_service_1 = require("../user/user.service");

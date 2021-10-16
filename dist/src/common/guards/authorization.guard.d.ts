@@ -1,5 +1,9 @@
 import { CanActivate, ExecutionContext } from '@nestjs/common';
-import { Observable } from 'rxjs';
-export declare class OnlyAuthorized implements CanActivate {
-    canActivate(context: ExecutionContext): boolean | Promise<boolean> | Observable<boolean>;
+import { PrismaService } from 'src/prisma/prisma.service';
+import { Reflector } from '@nestjs/core/services';
+export declare class CheckAPIAuthorization implements CanActivate {
+    private reflector;
+    private prismaService;
+    constructor(reflector: Reflector, prismaService: PrismaService);
+    canActivate(context: ExecutionContext): Promise<boolean>;
 }

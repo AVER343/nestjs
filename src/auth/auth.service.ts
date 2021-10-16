@@ -8,7 +8,7 @@ import {
 } from '@nestjs/common';
 import { JwtService } from '@nestjs/jwt';
 import { Users } from '@prisma/client';
-import { JWT_COOKIE_KEY, JWT_COOKIE_SECRET } from 'config/constant';
+import { JWT_COOKIE_KEY, JWT_COOKIE_SECRET } from 'config';
 import { CreateUserDTO } from 'src/user/dto/createUser.dto';
 import { UserDto } from 'src/user/dto/user.dto';
 import { UserService } from 'src/user/user.service';
